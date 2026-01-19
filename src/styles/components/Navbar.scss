@@ -1,0 +1,12 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px;
+  z-index: 100;
+  transition: background-color 0.5s ease-in;
+}
+
+.nav-black {
+  background-color: #111;
+}

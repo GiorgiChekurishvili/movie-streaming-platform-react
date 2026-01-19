@@ -1,0 +1,35 @@
+.row-header {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 0 40px;
+}
+
+.type-toggle {
+  display: flex;
+  gap: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.type-toggle button {
+  background: transparent;
+  color: #aaa;
+  border: none;
+  padding: 4px 12px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 2px;
+  transition: 0.2s;
+}
+
+.type-toggle button.active {
+  background: white;
+  color: black;
+}
+
+.type-toggle button:hover:not(.active) {
+  color: white;
+}
