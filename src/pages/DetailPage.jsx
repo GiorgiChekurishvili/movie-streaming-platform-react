@@ -1,17 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import TMDBService from '../services/TMDBService';
 import MovieCard from '../components/MovieCard';
 import '../styles/pages/DetailPage.scss'
 
 const DetailPage = () => {
     const { type, id } = useParams();
+    const navigate = useNavigate();
+
     const [item, setItem] = useState(null);
     const [seasons, setSeasons] = useState([]);
     const [activeSeason, setActiveSeason] = useState(1);
     const [episodes, setEpisodes] = useState([]);
     const [cast, setCast] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
+
+    // Logic for the main Play button
+    const handlePlayMain = () => {
+        if (type === 'movie') {
+            navigate(`/watch/movie/${id}`);
+        } else {
+            const firstSeasonNum = seasons.length > 0 ? seasons[0].season_number : 1;
+            navigate(`/watch/tv/${id}/${firstSeasonNum}/1`);
+        }
+    };
+
+    const handlePlayEpisode = (seasonNum, episodeNum) => {
+        navigate(`/watch/tv/${id}/${seasonNum}/${episodeNum}`);
+    };
 
     useEffect(() => {
         const loadInitialData = async () => {
@@ -20,15 +36,18 @@ const DetailPage = () => {
             const suggested = await TMDBService.getRecommendations(type, id);
 
             setItem(details);
-            setCast(actors.slice(0, 10));
+            setCast(actors.slice(0, 12));
             setRecommendations(suggested);
             window.scrollTo(0, 0);
 
             if (type === 'tv') {
                 const tvData = await TMDBService.getTvDetails(id);
-                setSeasons(tvData.seasons || []);
-                const firstSeason = tvData.seasons.find(s => s.season_number > 0) || tvData.seasons[0];
-                setActiveSeason(firstSeason.season_number);
+                const filteredSeasons = (tvData.seasons || []).filter(s => s.season_number > 0);
+                setSeasons(filteredSeasons);
+
+                if (filteredSeasons.length > 0) {
+                    setActiveSeason(filteredSeasons[0].season_number);
+                }
             }
         };
         loadInitialData();
@@ -38,7 +57,7 @@ const DetailPage = () => {
         if (type === 'tv') {
             const fetchEpisodes = async () => {
                 const epData = await TMDBService.getSeasonDetails(id, activeSeason);
-                setEpisodes(epData);
+                setEpisodes(epData || []);
             };
             fetchEpisodes();
         }
@@ -53,13 +72,15 @@ const DetailPage = () => {
                     <div className="details-content">
                         <h1>{item.title}</h1>
                         <div className="details-meta">
-                            <span className="rating">{Number(item.rating || 0).toFixed(1)}</span>
-                            <span className="year">{item.releaseDate ? new Date(item.releaseDate).getFullYear() : 'N/A'}</span>
+                            <span className="rating">⭐ {Number(item.rating || 0).toFixed(1)}</span>
+                            <span className="year">
+                                {(item.release_date || item.first_air_date) ? new Date(item.release_date || item.first_air_date).getFullYear() : 'N/A'}
+                            </span>
                         </div>
-                        <p className="overview">{item.overview}</p>
+                        <p className="overview">{item.description || item.overview}</p>
 
                         <div className="actions">
-                            <button className="play-now-btn">Play Now</button>
+                            <button className="play-now-btn" onClick={handlePlayMain}>Play Now</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +111,12 @@ const DetailPage = () => {
                         </div>
                         <div className="episodes-grid">
                             {episodes.map(ep => (
-                                <div key={ep.id} className="episode-card">
+                                <div
+                                    key={ep.id}
+                                    className="episode-card"
+                                    onClick={() => handlePlayEpisode(activeSeason, ep.episode_number)}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     <div className="ep-image-wrapper">
                                         <img src={`https://image.tmdb.org/t/p/w300${ep.still_path}`} alt={ep.name} />
                                         <div className="ep-number-badge">{ep.episode_number}</div>
@@ -106,13 +132,15 @@ const DetailPage = () => {
             )}
 
             <div className="section cast-section">
-                <h2>Top Cast</h2>
+                <h2>Actors</h2>
                 <div className="cast-grid">
                     {cast.map(actor => (
                         <div key={actor.id} className="actor-card">
-                            <img src={`https://image.tmdb.org/t/p/w200${actor.profile_path}`} alt={actor.name} />
-                            <p className="actor-name">{actor.name}</p>
-                            <p className="character">{actor.character}</p>
+                            <img src={actor.profile_path ? `https://image.tmdb.org/t/p/w300${actor.profile_path}` : 'https://via.placeholder.com/300x450?text=No+Image'} alt={actor.name} />
+                            <div className="actor-info">
+                                <p className="actor-name">{actor.name}</p>
+                                <p className="character">{actor.character}</p>
+                            </div>
                         </div>
                     ))}
                 </div>
@@ -129,4 +157,5 @@ const DetailPage = () => {
         </div>
     );
 };
+
 export default DetailPage;

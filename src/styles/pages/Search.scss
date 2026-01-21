@@ -1,29 +1,103 @@
-.search-page {
-  padding: 100px 40px;
-  min-height: 100vh;
-}
+$netflix-red: #e50914;
+$bg-dark: #141414;
+$text-light: #e5e5e5;
+$transition-speed: 450ms;
+$ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
+$hover-scale: 1.25;
 
-.search-header {
+.search-page {
+  padding: 120px 4% 40px;
+  min-height: 100vh;
+  background-color: $bg-dark;
+  color: $text-light;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 50px;
+
+  .search-input {
+    width: 100%;
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 15px 25px;
+    font-size: 1.2rem;
+    border-radius: 4px;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+
+    &:focus {
+      background: rgba(0, 0, 0, 0.9);
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    &::placeholder {
+      color: #808080;
+    }
+  }
+
+  .type-toggle {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 3rem;
+
+    button {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #999;
+      padding: 8px 24px;
+      cursor: pointer;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.3s $ease-netflix;
+
+      &:hover {
+        color: #fff;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      &.active {
+        background: #fff;
+        color: #000;
+        border-color: #fff;
+      }
+    }
+  }
+
+  .movie-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 45px 15px;
+    padding: 20px 0;
+    overflow: visible;
+  }
+
+  .no-results {
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 1.2rem;
+    color: #808080;
+    font-style: italic;
+  }
 }
 
-.search-input {
-  background: rgba(0, 0, 0, 0.75);
-  border: 1px solid white;
-  color: white;
-  padding: 15px 25px;
-  width: 100%;
-  max-width: 600px;
-  font-size: 1.5rem;
-  outline: none;
-}
+@media (max-width: 768px) {
+  .search-page {
+    padding-top: 100px;
 
-.no-results {
-  color: #666;
-  text-align: center;
-  margin-top: 50px;
+    .search-input {
+      font-size: 1rem;
+      padding: 12px 20px;
+    }
+
+    .movie-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 35px 10px;
+    }
+  }
 }

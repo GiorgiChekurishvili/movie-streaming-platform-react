@@ -86,11 +86,6 @@ export default class TMDBService {
     static async search(query, type = 'multi') {
         return await this._fetchFromTMDB(`/search/${type}?query=${encodeURIComponent(query)}`);
     }
-    static async getVideos(type, id) {
-        const response = await fetch(`${BASE_URL}/${type}/${id}/videos`, this._options);
-        const data = await response.json();
-        return data.results || [];
-    }
     static async getDetails(type = 'movie', id) {
         const endpoint = `/${type}/${id}?append_to_response=videos,credits,external_ids`;
         return await this._fetchFromTMDB(endpoint);
@@ -111,14 +106,5 @@ export default class TMDBService {
         const response = await fetch(`${BASE_URL}/tv/${tvId}/season/${seasonNumber}`, this._options);
         const data = await response.json();
         return data.episodes || [];
-    }
-    static async getById(id) {
-        try {
-            const movie = await this.getDetails(id, 'movie');
-            if (movie.title) return movie;
-            return await this.getDetails(id, 'tv');
-        } catch {
-            return null;
-        }
     }
 }

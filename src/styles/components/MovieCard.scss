@@ -2,59 +2,94 @@
   position: relative;
   border-radius: 4px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.5, 0, 0.1, 1);
   cursor: pointer;
   background-color: #181818;
   aspect-ratio: 2 / 3;
-}
+  text-decoration: none;
 
-.movie-card:hover {
-  transform: scale(1.08);
-  z-index: 10;
-  box-shadow: 0px 10px 20px rgba(0,0,0,0.5);
-}
+  &:hover {
+    transform: scale(1.08);
+    z-index: 10;
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.6);
 
-.card-image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+    .card-overlay {
+      opacity: 1;
+    }
+  }
 
-.card-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 15px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
+  .card-image-wrapper {
+    width: 100%;
+    height: 100%;
 
-.movie-card:hover .card-overlay {
-  opacity: 1;
-}
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
 
-.card-title {
-  font-size: 0.9rem;
-  margin: 0 0 5px 0;
-  color: white;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+  .card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 12px 12px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.8) 50%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
 
-.card-meta {
-  display: flex;
-  justify-content: space-between;
-  font-size: 0.75rem;
-  color: #46d369;
-  font-weight: bold;
-}
+  .card-title {
+    font-size: 0.95rem;
+    margin: 0 0 8px 0;
+    color: #fff;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 
-.type-badge {
-  color: #aaa;
-  border: 1px solid #aaa;
-  padding: 0 4px;
-  border-radius: 2px;
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+
+    .meta-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+
+      .rating {
+        color: #46d369;
+        font-weight: 800;
+      }
+
+      .separator {
+        color: #666;
+        font-size: 0.8rem;
+      }
+
+      .year {
+        color: #e5e5e5;
+        font-weight: 500;
+      }
+    }
+
+    .type-badge {
+      color: #aaa;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
 }

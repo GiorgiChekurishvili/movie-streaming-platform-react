@@ -1,12 +1,98 @@
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 20px;
-  padding: 20px;
+$netflix-red: #e50914;
+$bg-dark: #141414;
+$text-light: #e5e5e5;
+$transition-speed: 450ms;
+$ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
+$hover-scale: 1.25;
+
+.browse-container {
+  padding-top: 80px;
+  min-height: 100vh;
+  background-color: $bg-dark;
+  color: $text-light;
+
+  .browse-header {
+    padding: 20px 4%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(to bottom, rgba($bg-dark, 1) 60%, rgba($bg-dark, 0));
+    backdrop-filter: blur(10px);
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .category-filters {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      scrollbar-width: none;
+
+      &::-webkit-scrollbar { display: none; }
+
+      .genre-chip {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #fff;
+        padding: 8px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        white-space: nowrap;
+        transition: all 0.3s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.15);
+          border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        &.active {
+          background: #fff;
+          color: $bg-dark;
+          border-color: #fff;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  .movie-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 40px 15px;
+    padding: 40px 4%;
+
+    overflow: visible;
+  }
+
+  .loader {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.2rem;
+    color: $netflix-red;
+    font-weight: 600;
+    letter-spacing: 1px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
 }
-.movie-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  padding: 20px;
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+@media (max-width: 768px) {
+  .browse-container {
+    .browse-header h1 { font-size: 1.8rem; }
+    .movie-grid {
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 30px 10px;
+    }
+  }
 }

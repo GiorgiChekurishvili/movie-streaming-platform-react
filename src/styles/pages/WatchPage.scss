@@ -1,0 +1,206 @@
+$netflix-red: #e50914;
+$sidebar-bg: #141414;
+$control-bg: rgba(20, 20, 20, 0.85);
+
+.watch-page {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  color: #ffffff;
+  z-index: 2000;
+  overflow: hidden;
+  display: flex;
+
+  .controls-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 20px 30px;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    display: flex;
+    justify-content: flex-end;
+    z-index: 100;
+    pointer-events: none;
+
+    .top-right-controls {
+      display: flex;
+      gap: 15px;
+      pointer-events: auto;
+    }
+
+    button {
+      background: $control-bg;
+      backdrop-filter: blur(8px);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 22px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      &:hover {
+        background: #fff;
+        color: #000;
+        transform: translateY(-2px);
+      }
+    }
+
+    .exit-button {
+      background: rgba($netflix-red, 0.2);
+      border: 1px solid rgba($netflix-red, 0.4);
+
+      &:hover {
+        background: $netflix-red;
+        color: #fff;
+        border-color: $netflix-red;
+      }
+    }
+  }
+
+  .episode-sidebar {
+    position: fixed;
+    right: -400px;
+    top: 0;
+    width: 400px;
+    height: 100%;
+    background: $sidebar-bg;
+    z-index: 3000;
+    transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: -15px 0 40px rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+
+    &.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      padding: 35px 25px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #333;
+
+      h3 {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 700;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        color: #777;
+        font-size: 2rem;
+        cursor: pointer;
+        transition: color 0.2s;
+        &:hover { color: #fff; }
+      }
+    }
+
+    .sidebar-content {
+      flex: 1;
+      padding: 25px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+
+      .season-selector {
+        margin-bottom: 30px;
+
+        label {
+          display: block;
+          margin-bottom: 12px;
+          color: #777;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          font-weight: 600;
+        }
+
+        select {
+          width: 100%;
+          padding: 14px;
+          background: #252525;
+          color: #fff;
+          border: 1px solid #3d3d3d;
+          border-radius: 6px;
+          font-size: 1.1rem;
+          cursor: pointer;
+
+          &:focus { border-color: $netflix-red; outline: none; }
+        }
+      }
+
+      .ep-list {
+        flex: 1;
+        overflow-y: auto;
+        padding-right: 8px;
+
+        &::-webkit-scrollbar { width: 4px; }
+        &::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+
+        .ep-item {
+          padding: 18px 15px;
+          margin-bottom: 10px;
+          background: rgba(255, 255, 255, 0.02);
+          border-radius: 6px;
+          cursor: pointer;
+          display: flex;
+          gap: 15px;
+          transition: 0.3s;
+          color: #bbb;
+          font-size: 1rem;
+
+          span { color: $netflix-red; font-weight: 800; }
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            transform: translateX(5px);
+          }
+
+          &.active {
+            background: $netflix-red;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba($netflix-red, 0.3);
+            span { color: #fff; }
+          }
+        }
+      }
+    }
+  }
+
+  .video-frame-container {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .watch-page {
+    .episode-sidebar { width: 100%; right: -100%; }
+    .controls-overlay {
+      padding: 15px;
+      .top-right-controls { gap: 8px; }
+      button { padding: 8px 14px; font-size: 0.85rem; }
+    }
+  }
+}

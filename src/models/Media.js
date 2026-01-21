@@ -9,13 +9,11 @@ export class Media {
         this.poster = apiData.poster_path
             ? `https://image.tmdb.org/t/p/w500${apiData.poster_path}`
             : null;
-
+        this.release_date = apiData.release_date || apiData.first_air_date;
         this.backdrop = apiData.backdrop_path
             ? `https://image.tmdb.org/t/p/original${apiData.backdrop_path}`
             : null;
         this.rating = apiData.vote_average?.toFixed(1);
-        this.year = (apiData.release_date || apiData.first_air_date || "").split("-")[0];
 
-        this.imdbId = apiData.external_ids?.imdb_id || null;
     }
 }

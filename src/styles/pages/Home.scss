@@ -1,5 +1,31 @@
-.rows-container{
-  margin-top: -150px;
+.home {
+  background-color: #141414;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.rows-container {
   position: relative;
-  z-index: 2
+  margin-top: -120px;
+  padding-bottom: 4rem;
+  z-index: 5;
+}
+
+.rows-container > * {
+  margin-bottom: 2.5rem;
+}
+
+.movie-row,
+.provider-row {
+  overflow: visible;
+}
+
+@media (max-width: 768px) {
+  .rows-container {
+    margin-top: -80px;
+  }
+
+  .rows-container > * {
+    margin-bottom: 2rem;
+  }
 }
