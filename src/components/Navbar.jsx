@@ -8,14 +8,11 @@ const Navbar = () => {
     const [show, handleShow] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
+    const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
         const scrollListener = () => {
-            if (window.scrollY > 100) {
-                handleShow(true);
-            } else {
-                handleShow(false);
-            }
+            handleShow(window.scrollY > 100);
         };
         window.addEventListener("scroll", scrollListener);
         return () => window.removeEventListener("scroll", scrollListener);
@@ -25,18 +22,29 @@ const Navbar = () => {
         if (e.key === 'Enter' && searchQuery.trim()) {
             navigate('/search', { state: { incomingQuery: searchQuery } });
             setSearchQuery('');
+            setMenuOpen(false);
         }
     };
 
     return (
-        <nav className={`navbar ${show && "nav-black"}`}>
+        <nav className={`navbar ${show || menuOpen ? "nav-black" : ""} ${menuOpen ? "menu-open" : ""}`}>
             <div className="nav-left">
-                <Link to="/" className="logo">STREAMFLIX</Link>
-                <Link to={`/browse/${MEDIA_TYPE.MOVIE}`}>Movies</Link>
-                <Link to={`/browse/${MEDIA_TYPE.TV}`}>TV Series</Link>
-                <Link to="/anime">Anime</Link>
-                <Link to="/channels">Channels</Link>
+                <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>STREAMFLIX</Link>
+
+                <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                    <span className="bar"></span>
+                </div>
+
+                <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
+                    <Link to={`/browse/${MEDIA_TYPE.MOVIE}`} onClick={() => setMenuOpen(false)}>Movies</Link>
+                    <Link to={`/browse/${MEDIA_TYPE.TV}`} onClick={() => setMenuOpen(false)}>TV Series</Link>
+                    <Link to="/anime" onClick={() => setMenuOpen(false)}>Anime</Link>
+                    <Link to="/channels" onClick={() => setMenuOpen(false)}>Channels</Link>
+                </div>
             </div>
+
             <div className="nav-search-container">
                 <input
                     type="text"
