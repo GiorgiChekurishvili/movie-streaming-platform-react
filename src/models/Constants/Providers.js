@@ -6,6 +6,7 @@ export const PROVIDERS = {
     PARAMOUNT_PLUS: { id: 2303, name: "Paramount+", color: "#0064ff" },
     APPLE_TV: { id: 350, name: "Apple TV+", color: "#000000" },
     CRUNCHYROLL: { id: 283, name: "Crunchyroll", color: "#f68b1f" },
+    CARTOONNETWORK: {id: 2329, name:"Cartoon Network", color: "#000000" },
 
 };
 
