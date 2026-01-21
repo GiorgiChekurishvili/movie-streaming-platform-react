@@ -1,5 +1,4 @@
 import { Media } from '../models/Media';
-import {MEDIA_TYPE} from "../models/Constants/MediaType.js";
 
 const BASE_URL = 'https://api.themoviedb.org/3';
 const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2ZDljYTUzNmViZmU2NGI5ODEzMTZmNTBkNmUzOWQ4NiIsIm5iZiI6MTc2ODU5MTkwMS4xMTEsInN1YiI6IjY5NmE5MjFkNzdjZjMwZDhmMzgzNDZmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.fhbOF1WXCv2Clitsf7lhP6NvLV3jx7aVzzlzXhYBlIs";

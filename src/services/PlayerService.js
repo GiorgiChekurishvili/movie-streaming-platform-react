@@ -1,5 +1,3 @@
-// services/PlayerService.js
-
 const BASE_PLAYER_URL = "https://vidsrc.cc/v2/embed";
 
 class PlayerService {
