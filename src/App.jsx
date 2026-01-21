@@ -8,6 +8,7 @@ import { MEDIA_TYPE } from './models/Constants/MediaType.js';
 import Search from "./pages/Search.jsx";
 import './App.scss'
 import WatchPage from "./pages/WatchPage.jsx";
+import Channels from "./pages/BrowseChannels.jsx";
 
 export default function App() {
     const location = useLocation();
@@ -27,6 +28,7 @@ export default function App() {
                 <Route path="/search" element={<Search />} />
                 <Route path="/watch/:type/:id" element={<WatchPage />} />
                 <Route path="/watch/:type/:id/:season/:episode" element={<WatchPage />} />
+                <Route path="/channels" element={<Channels />} />
             </Routes>
         </>
     );

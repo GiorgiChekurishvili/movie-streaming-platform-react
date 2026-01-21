@@ -35,6 +35,7 @@ const Navbar = () => {
                 <Link to={`/browse/${MEDIA_TYPE.MOVIE}`}>Movies</Link>
                 <Link to={`/browse/${MEDIA_TYPE.TV}`}>TV Series</Link>
                 <Link to="/anime">Anime</Link>
+                <Link to="/channels">Channels</Link>
             </div>
             <div className="nav-search-container">
                 <input

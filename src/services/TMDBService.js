@@ -107,4 +107,8 @@ export default class TMDBService {
         const data = await response.json();
         return data.episodes || [];
     }
+    static async getDiscoverByNetwork(networkId, page = 1) {
+        const endpoint = `/discover/tv?with_networks=${networkId}&page=${page}&sort_by=popularity.desc`;
+        return await this._fetchFromTMDB(endpoint);
+    }
 }
