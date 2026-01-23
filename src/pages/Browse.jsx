@@ -7,7 +7,6 @@ import '../styles/pages/Browse.scss';
 const Browse = ({ type: propsType }) => {
     const { type: urlType } = useParams();
     const activeType = propsType || urlType;
-
     const scrollRef = useRef(null);
 
     const [items, setItems] = useState([]);
@@ -21,7 +20,6 @@ const Browse = ({ type: propsType }) => {
         try {
             const data = await TMDBService.getDiscover(activeType, currentGenre, pageNum);
             const validData = (data || []).filter(item => item.poster && !item.poster.includes('null'));
-
             setItems(prev => isReset ? validData : [...prev, ...validData]);
         } catch (error) {
             console.error("Fetch error:", error);
@@ -29,52 +27,42 @@ const Browse = ({ type: propsType }) => {
             setLoading(false);
         }
     }, [activeType, selectedGenre]);
+
     useEffect(() => {
         const el = scrollRef.current;
         if (el) {
             const onWheel = (e) => {
                 if (e.deltaY === 0) return;
-
                 const canScrollRight = el.scrollLeft < (el.scrollWidth - el.clientWidth - 1);
                 const canScrollLeft = el.scrollLeft > 0;
-
                 if ((e.deltaY > 0 && canScrollRight) || (e.deltaY < 0 && canScrollLeft)) {
                     e.preventDefault();
                     el.scrollLeft += e.deltaY;
                 }
             };
-
             el.addEventListener('wheel', onWheel, { passive: false });
             return () => el.removeEventListener('wheel', onWheel);
         }
     }, [genres]);
 
     useEffect(() => {
-        setItems([]);
-        setPage(1);
         setSelectedGenre('');
-
         if (activeType !== 'anime') {
             TMDBService.getGenres(activeType).then(list => setGenres(list || []));
         } else {
             setGenres([]);
         }
-
-        fetchData(1, true, '');
-    }, [activeType, fetchData]);
+    }, [activeType]);
 
     useEffect(() => {
-        setItems([]);
         setPage(1);
         fetchData(1, true, selectedGenre);
         window.scrollTo(0, 0);
-    }, [selectedGenre, activeType, fetchData]);
+    }, [selectedGenre, activeType]);
 
     const handleScroll = useCallback(() => {
         if (window.innerHeight + document.documentElement.scrollTop + 500 >= document.documentElement.offsetHeight) {
-            if (!loading) {
-                setPage(prev => prev + 1);
-            }
+            if (!loading) setPage(prev => prev + 1);
         }
     }, [loading]);
 
@@ -87,21 +75,15 @@ const Browse = ({ type: propsType }) => {
         if (page > 1) {
             fetchData(page, false, selectedGenre);
         }
-    }, [page, fetchData, selectedGenre]);
+    }, [page]);
 
     return (
         <div className="browse-container">
             <header className="browse-header">
-                <h1>
-                    Browsing {activeType === 'movie' ? 'Movies' : activeType === 'tv' ? 'TV Shows' : 'Anime'}
-                </h1>
-
+                <h1>Browsing {activeType === 'movie' ? 'Movies' : activeType === 'tv' ? 'TV Shows' : 'Anime'}</h1>
                 {activeType !== 'anime' && (
                     <div className="filters-wrapper">
-                        <div
-                            className="category-filters"
-                            ref={scrollRef}
-                        >
+                        <div className="category-filters" ref={scrollRef}>
                             <button
                                 className={`genre-chip ${selectedGenre === '' ? 'active' : ''}`}
                                 onClick={() => setSelectedGenre('')}
@@ -128,11 +110,7 @@ const Browse = ({ type: propsType }) => {
                 ))}
             </div>
 
-            {loading && (
-                <div className="loader">
-                    <p>Loading more content...</p>
-                </div>
-            )}
+            {loading && <div className="loader"><p>Loading...</p></div>}
         </div>
     );
 };

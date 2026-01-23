@@ -6,16 +6,29 @@ $nav-height: 68px;
   padding-top: $nav-height;
   background-color: $bg-dark;
   min-height: 100vh;
+  position: relative;
 
   .browse-header {
-    padding: 20px 4%;
     position: sticky;
     top: $nav-height;
     z-index: 100;
     background: $bg-dark;
+    padding: 20px 4% 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: -150px;
+      left: 0;
+      right: 0;
+      height: 150px;
+      background: $bg-dark;
+      z-index: -1;
+      pointer-events: none;
+    }
 
     h1 {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
       margin-bottom: 20px;
       font-weight: 800;
       color: #fff;
@@ -23,6 +36,7 @@ $nav-height: 68px;
 
     .filters-wrapper {
       position: relative;
+      background: $bg-dark;
 
       &::after {
         content: '';
@@ -43,7 +57,6 @@ $nav-height: 68px;
         padding: 10px 0;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
-
         scrollbar-width: none;
         &::-webkit-scrollbar { display: none; }
 
@@ -58,10 +71,6 @@ $nav-height: 68px;
           font-size: 0.95rem;
           font-weight: 500;
           transition: all 0.2s;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.2);
-          }
 
           &.active {
             background: #fff;
@@ -79,27 +88,17 @@ $nav-height: 68px;
     grid-template-columns: repeat(6, 1fr);
     gap: 30px 15px;
     padding: 40px 4%;
+    position: relative;
+    z-index: 1;
 
     @media (max-width: 1200px) { grid-template-columns: repeat(5, 1fr); }
     @media (max-width: 992px) { grid-template-columns: repeat(4, 1fr); }
     @media (max-width: 768px) { grid-template-columns: repeat(3, 1fr); }
-    @media (max-width: 480px) { grid-template-columns: repeat(2, 1fr); gap: 15px 10px; }
-  }
 
-  .loader {
-    text-align: center;
-    padding: 40px;
-    color: $netflix-red;
-    &::after {
-      content: '';
-      display: inline-block;
-      width: 25px; height: 25px;
-      border: 3px solid rgba(255,255,255,0.1);
-      border-top-color: $netflix-red;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
+    @media (max-width: 480px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px 10px;
+      padding-top: 20px;
     }
   }
 }
-
-@keyframes spin { to { transform: rotate(360deg); } }
