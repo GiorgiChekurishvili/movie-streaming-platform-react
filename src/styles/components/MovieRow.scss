@@ -1,15 +1,14 @@
 $netflix-red: #e50914;
 $bg-dark: #141414;
 $text-light: #e5e5e5;
-
 $transition-speed: 450ms;
 $ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
-$hover-scale: 1.4;
+$hover-scale: 1.25;
 
 .movie-row {
   display: flex;
   flex-direction: column;
-  margin: 3vw 0;
+  margin: 2.5rem 0;
   color: $text-light;
   overflow: visible;
 
@@ -19,42 +18,46 @@ $hover-scale: 1.4;
     justify-content: space-between;
     padding: 0 4%;
     margin-bottom: 0.8rem;
-    z-index: 2;
+    z-index: 10;
 
     .row-title {
-      font-size: 1.4vw;
+      font-size: 1.4rem;
       font-weight: 700;
       color: #fff;
-      margin: 0;
-      cursor: pointer;
       transition: color 0.3s ease;
       &:hover { color: $netflix-red; }
     }
 
     .type-toggle {
       display: flex;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       border-radius: 4px;
-      padding: 2px;
+      padding: 3px;
       border: 1px solid rgba(255, 255, 255, 0.1);
 
       button {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid transparent;
-        color: #999;
-        padding: 6px 16px;
+        background: transparent;
+        border: none;
+        color: #808080;
+        padding: 5px 12px;
         cursor: pointer;
-        border-radius: 4px;
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 600;
-        transition: all 0.3s ease;
+        transition: all 0.2s;
 
         &.active {
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(255, 255, 255, 0.15);
           color: #fff;
-          border-color: rgba(255, 255, 255, 0.2);
+          border-radius: 2px;
         }
       }
+    }
+
+    @media (max-width: 600px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      .type-toggle { width: 100%; button { flex: 1; } }
     }
   }
 
@@ -70,24 +73,21 @@ $hover-scale: 1.4;
       background: rgba(0, 0, 0, 0.5);
       border: none;
       color: white;
-      font-size: 2.5rem;
+      font-size: 2rem;
       z-index: 30;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       opacity: 0;
-      transition: background 0.3s, opacity 0.3s, transform 0.2s;
+      transition: all 0.3s;
 
-      &:hover {
-        background: rgba(0, 0, 0, 0.8);
-        transform: scaleY(1.1);
-      }
+      &:hover { background: rgba(0, 0, 0, 0.8); }
+      &.left { left: 0; }
+      &.right { right: 0; }
 
-      &.left { left: 0; border-radius: 0 4px 4px 0; }
-      &.right { right: 0; border-radius: 4px 0 0 4px; }
+      @media (max-width: 1024px) { opacity: 0.7; width: 6%; }
     }
-
     &:hover .row-arrow { opacity: 1; }
   }
 
@@ -95,16 +95,14 @@ $hover-scale: 1.4;
     position: relative;
     display: flex;
     align-items: center;
-    padding: 60px 0;
-    margin: -60px 0;
-    overflow-x: clip;
-    min-height: 200px;
+    padding: 40px 0;
+    margin: -40px 0;
+    overflow: hidden;
+    min-height: 180px;
   }
 
   .row-posters {
-    margin-top: 20px;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
     gap: 10px;
     width: 100%;
     flex-shrink: 0;
@@ -112,10 +110,9 @@ $hover-scale: 1.4;
 
     &.animating-out {
       position: absolute;
-      top: 60px;
+      top: 40px;
       left: 0;
       z-index: 1;
-      pointer-events: none;
     }
 
     &.animating-in { z-index: 2; }

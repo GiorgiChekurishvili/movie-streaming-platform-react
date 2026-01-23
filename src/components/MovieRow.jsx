@@ -1,19 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import MovieCard from './MovieCard';
 import { MEDIA_TYPE } from '../models/Constants/MediaType.js';
 import '../styles/components/MovieRow.scss';
 
-const ITEMS_PER_PAGE = 5;
 const ANIMATION_DURATION = 450;
 
 const MovieRow = ({ title, fetchMethod }) => {
     const [type, setType] = useState(MEDIA_TYPE.MOVIE);
     const [movies, setMovies] = useState([]);
     const [page, setPage] = useState(0);
+    const [itemsPerPage, setItemsPerPage] = useState(5);
     const [prevMovies, setPrevMovies] = useState([]);
     const [nextMovies, setNextMovies] = useState([]);
     const [animating, setAnimating] = useState(false);
     const [direction, setDirection] = useState(null);
+
+    const updateItemsPerPage = useCallback(() => {
+        const width = window.innerWidth;
+        let count = 5;
+        if (width <= 500) count = 2;
+        else if (width <= 800) count = 3;
+        else if (width <= 1200) count = 4;
+
+        setItemsPerPage(count);
+        setPage(0);
+    }, []);
+
+    useEffect(() => {
+        updateItemsPerPage();
+        window.addEventListener('resize', updateItemsPerPage);
+        return () => window.removeEventListener('resize', updateItemsPerPage);
+    }, [updateItemsPerPage]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -26,7 +43,7 @@ const MovieRow = ({ title, fetchMethod }) => {
         fetchData();
     }, [type, fetchMethod]);
 
-    const maxPage = Math.ceil(movies.length / ITEMS_PER_PAGE) - 1;
+    const maxPage = Math.ceil(movies.length / itemsPerPage) - 1;
 
     const handlePageChange = (dir) => {
         if (animating) return;
@@ -35,8 +52,8 @@ const MovieRow = ({ title, fetchMethod }) => {
         if (newPage < 0 || newPage > maxPage) return;
 
         setDirection(dir);
-        setPrevMovies(movies.slice(page * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE + ITEMS_PER_PAGE));
-        setNextMovies(movies.slice(newPage * ITEMS_PER_PAGE, newPage * ITEMS_PER_PAGE + ITEMS_PER_PAGE));
+        setPrevMovies(movies.slice(page * itemsPerPage, (page + 1) * itemsPerPage));
+        setNextMovies(movies.slice(newPage * itemsPerPage, (newPage + 1) * itemsPerPage));
         setAnimating(true);
 
         setTimeout(() => {
@@ -46,7 +63,7 @@ const MovieRow = ({ title, fetchMethod }) => {
         }, ANIMATION_DURATION);
     };
 
-    const currentSlice = movies.slice(page * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE + ITEMS_PER_PAGE);
+    const currentSlice = movies.slice(page * itemsPerPage, (page + 1) * itemsPerPage);
 
     return (
         <div className="movie-row">
@@ -77,19 +94,25 @@ const MovieRow = ({ title, fetchMethod }) => {
                 )}
 
                 <div className="row-posters-container">
+                    <div
+                        className={`row-posters ${animating ? `animating-in slide-in-${direction}` : ''}`}
+                        style={{ gridTemplateColumns: `repeat(${itemsPerPage}, 1fr)` }}
+                    >
+                        {(animating ? nextMovies : currentSlice).map((item) => (
+                            <MovieCard key={`curr-${item.id}`} media={item} />
+                        ))}
+                    </div>
+
                     {animating && (
-                        <div className={`row-posters animating-out slide-out-${direction}`}>
+                        <div
+                            className={`row-posters animating-out slide-out-${direction}`}
+                            style={{ gridTemplateColumns: `repeat(${itemsPerPage}, 1fr)` }}
+                        >
                             {prevMovies.map((item) => (
                                 <MovieCard key={`prev-${item.id}`} media={item} />
                             ))}
                         </div>
                     )}
-
-                    <div className={`row-posters ${animating ? `animating-in slide-in-${direction}` : ''}`}>
-                        {(animating ? nextMovies : currentSlice).map((item) => (
-                            <MovieCard key={`curr-${item.id}`} media={item} />
-                        ))}
-                    </div>
                 </div>
             </div>
         </div>

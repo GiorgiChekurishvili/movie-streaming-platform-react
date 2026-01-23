@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import TMDBService from '../services/TMDBService';
 import MovieCard from '../components/MovieCard';
@@ -7,6 +7,8 @@ import '../styles/pages/Browse.scss';
 const Browse = ({ type: propsType }) => {
     const { type: urlType } = useParams();
     const activeType = propsType || urlType;
+
+    const scrollRef = useRef(null);
 
     const [items, setItems] = useState([]);
     const [genres, setGenres] = useState([]);
@@ -27,6 +29,25 @@ const Browse = ({ type: propsType }) => {
             setLoading(false);
         }
     }, [activeType, selectedGenre]);
+    useEffect(() => {
+        const el = scrollRef.current;
+        if (el) {
+            const onWheel = (e) => {
+                if (e.deltaY === 0) return;
+
+                const canScrollRight = el.scrollLeft < (el.scrollWidth - el.clientWidth - 1);
+                const canScrollLeft = el.scrollLeft > 0;
+
+                if ((e.deltaY > 0 && canScrollRight) || (e.deltaY < 0 && canScrollLeft)) {
+                    e.preventDefault();
+                    el.scrollLeft += e.deltaY;
+                }
+            };
+
+            el.addEventListener('wheel', onWheel, { passive: false });
+            return () => el.removeEventListener('wheel', onWheel);
+        }
+    }, [genres]);
 
     useEffect(() => {
         setItems([]);
@@ -40,18 +61,17 @@ const Browse = ({ type: propsType }) => {
         }
 
         fetchData(1, true, '');
-    }, [activeType]);
+    }, [activeType, fetchData]);
 
     useEffect(() => {
-        if (selectedGenre !== '' && activeType !== 'anime') {
-            setItems([]);
-            setPage(1);
-            fetchData(1, true, selectedGenre);
-        }
-    }, [selectedGenre]);
+        setItems([]);
+        setPage(1);
+        fetchData(1, true, selectedGenre);
+        window.scrollTo(0, 0);
+    }, [selectedGenre, activeType, fetchData]);
 
     const handleScroll = useCallback(() => {
-        if (window.innerHeight + document.documentElement.scrollTop + 100 >= document.documentElement.offsetHeight) {
+        if (window.innerHeight + document.documentElement.scrollTop + 500 >= document.documentElement.offsetHeight) {
             if (!loading) {
                 setPage(prev => prev + 1);
             }
@@ -67,29 +87,37 @@ const Browse = ({ type: propsType }) => {
         if (page > 1) {
             fetchData(page, false, selectedGenre);
         }
-    }, [page]);
+    }, [page, fetchData, selectedGenre]);
 
     return (
         <div className="browse-container">
             <header className="browse-header">
-                <h1>Browsing {activeType === 'movie' ? 'Movies' : activeType === 'tv' ? 'TV Shows' : 'Anime'}</h1>
+                <h1>
+                    Browsing {activeType === 'movie' ? 'Movies' : activeType === 'tv' ? 'TV Shows' : 'Anime'}
+                </h1>
+
                 {activeType !== 'anime' && (
-                    <div className="category-filters">
-                        <button
-                            className={`genre-chip ${!selectedGenre ? 'active' : ''}`}
-                            onClick={() => setSelectedGenre('')}
+                    <div className="filters-wrapper">
+                        <div
+                            className="category-filters"
+                            ref={scrollRef}
                         >
-                            All
-                        </button>
-                        {genres.map(genre => (
                             <button
-                                key={genre.id}
-                                className={`genre-chip ${selectedGenre === genre.id ? 'active' : ''}`}
-                                onClick={() => setSelectedGenre(genre.id)}
+                                className={`genre-chip ${selectedGenre === '' ? 'active' : ''}`}
+                                onClick={() => setSelectedGenre('')}
                             >
-                                {genre.name}
+                                All
                             </button>
-                        ))}
+                            {genres.map(genre => (
+                                <button
+                                    key={genre.id}
+                                    className={`genre-chip ${selectedGenre === genre.id ? 'active' : ''}`}
+                                    onClick={() => setSelectedGenre(genre.id)}
+                                >
+                                    {genre.name}
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 )}
             </header>
@@ -100,7 +128,11 @@ const Browse = ({ type: propsType }) => {
                 ))}
             </div>
 
-            {loading && <div className="loader">Loading more...</div>}
+            {loading && (
+                <div className="loader">
+                    <p>Loading more content...</p>
+                </div>
+            )}
         </div>
     );
 };

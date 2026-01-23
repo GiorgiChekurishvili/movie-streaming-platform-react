@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MEDIA_TYPE } from '../models/Constants/MediaType.js';
-
 import '../styles/components/Navbar.scss';
 
 const Navbar = () => {
@@ -11,9 +10,7 @@ const Navbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     useEffect(() => {
-        const scrollListener = () => {
-            handleShow(window.scrollY > 100);
-        };
+        const scrollListener = () => handleShow(window.scrollY > 100);
         window.addEventListener("scroll", scrollListener);
         return () => window.removeEventListener("scroll", scrollListener);
     }, []);
@@ -26,34 +23,45 @@ const Navbar = () => {
         }
     };
 
+    const SearchInput = (className) => (
+        <input
+            type="text"
+            placeholder="Search Movies, TV Series..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
+            className={className}
+        />
+    );
+
     return (
         <nav className={`navbar ${show || menuOpen ? "nav-black" : ""} ${menuOpen ? "menu-open" : ""}`}>
             <div className="nav-left">
-                <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>STREAMFLIX</Link>
-
-                <div className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                <div
+                    className={`menu-toggle ${menuOpen ? 'open' : ''}`}
+                    onClick={() => setMenuOpen(!menuOpen)}
+                >
                     <span className="bar"></span>
                     <span className="bar"></span>
                     <span className="bar"></span>
                 </div>
 
+                <Link to="/" className="logo" onClick={() => setMenuOpen(false)}>STREAMFLIX</Link>
+
                 <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
-                    <Link to={`/browse/${MEDIA_TYPE.MOVIE}`} onClick={() => setMenuOpen(false)}>Movies</Link>
-                    <Link to={`/browse/${MEDIA_TYPE.TV}`} onClick={() => setMenuOpen(false)}>TV Series</Link>
-                    <Link to="/anime" onClick={() => setMenuOpen(false)}>Anime</Link>
-                    <Link to="/channels" onClick={() => setMenuOpen(false)}>Channels</Link>
+                    <div className="mobile-search-container">
+                        {SearchInput("nav-search-input mobile")}
+                    </div>
+
+                    <Link className="nav-link-item" to={`/browse/${MEDIA_TYPE.MOVIE}`} onClick={() => setMenuOpen(false)}>Movies</Link>
+                    <Link className="nav-link-item" to={`/browse/${MEDIA_TYPE.TV}`} onClick={() => setMenuOpen(false)}>TV Series</Link>
+                    <Link className="nav-link-item" to="/anime" onClick={() => setMenuOpen(false)}>Anime</Link>
+                    <Link className="nav-link-item" to="/channels" onClick={() => setMenuOpen(false)}>Channels</Link>
                 </div>
             </div>
 
-            <div className="nav-search-container">
-                <input
-                    type="text"
-                    placeholder="Search Movies, TV Series..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearch}
-                    className="nav-search-input"
-                />
+            <div className="nav-search-container desktop">
+                {SearchInput("nav-search-input")}
             </div>
         </nav>
     );

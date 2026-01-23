@@ -36,7 +36,7 @@ $ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
       z-index: 10;
 
       h1 {
-        font-size: clamp(2.5rem, 5vw, 4.5rem);
+        font-size: clamp(2.2rem, 5vw, 4.5rem);
         font-weight: 800;
         margin-bottom: 1.5rem;
         line-height: 1.1;
@@ -56,21 +56,16 @@ $ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
           border-radius: 4px;
           font-weight: 700;
         }
-
-        .year {
-          color: #a3a3a3;
-          font-weight: 600;
-        }
+        .year { color: #a3a3a3; font-weight: 600; }
       }
 
       .overview {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         line-height: 1.6;
         color: #d2d2d2;
-        margin-bottom: 2.5rem;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        margin-bottom: 2rem;
         display: -webkit-box;
-        -webkit-line-clamp: 4;
+        -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -80,14 +75,13 @@ $ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
         color: #000;
         border: none;
         padding: 0.8rem 2.5rem;
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: 700;
         border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
-
         &:hover {
-          background: rgba(255, 255, 255, 0.75);
+          background: rgba(255, 255, 255, 0.85);
           transform: scale(1.05);
         }
       }
@@ -98,188 +92,207 @@ $ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
     padding: 2rem 4%;
 
     .seasons-section {
-      margin-bottom: 4rem;
+      margin-bottom: 3rem;
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        border-left: 3px solid $netflix-red;
+        padding-left: 12px;
+      }
+
       .seasons-tabs {
         display: grid;
-        grid-template-columns: repeat(8, 1fr);
-        gap: 15px;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 20px;
         width: 100%;
-        overflow: visible;
 
         .season-tab {
-          min-width: 160px;
-          padding: 1.2rem;
-          background: #232323;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 1.5rem 1rem;
+          background: #1f1f1f;
           border-radius: 4px;
           cursor: pointer;
-          transition: background 0.3s;
-          border-bottom: 3px solid transparent;
+          text-align: center;
+          border: 2px solid transparent;
+          transition: all 0.3s ease;
+
+          h3 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          span {
+            font-size: 0.85rem;
+            color: #808080;
+          }
+
+          &:hover {
+            background: #2b2b2b;
+            transform: translateY(-5px);
+          }
 
           &.active {
-            background: #333;
-            border-bottom-color: $netflix-red;
+            background: #2b2b2b;
+            border-color: $netflix-red;
+            box-shadow: 0 0 15px rgba($netflix-red, 0.2);
+
+            h3 { color: $netflix-red; }
+            span { color: #fff; }
+          }
+        }
+
+
+        @media (max-width: 1200px) {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 900px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        @media (max-width: 600px) {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+
+          .season-tab {
+            padding: 1.2rem 0.8rem;
+            h3 { font-size: 1rem; }
+            span { font-size: 0.75rem; }
           }
         }
       }
     }
 
-    .episodes-section {
-      .episodes-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-        border-bottom: 1px solid #333;
-        padding-bottom: 1rem;
-      }
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px 20px;
 
-      .episodes-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 40px 20px;
-        width: 100%;
-
-        .episode-card {
-          .ep-image-wrapper {
-            position: relative;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            border-radius: 4px;
-            cursor: pointer;
-
-            img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s $ease-netflix; }
-
-            .ep-number-badge {
-              position: absolute;
-              top: 10px; left: 10px;
-              background: rgba(0,0,0,0.8);
-              padding: 4px 10px;
-              font-weight: 700;
-              z-index: 2;
-            }
-
-            .ep-title-overlay {
-              position: absolute;
-              bottom: 0; left: 0; right: 0;
-              padding: 30px 15px 10px;
-              background: linear-gradient(to top, rgba(0,0,0,1), transparent);
-              font-weight: 600;
-            }
+      .episode-card {
+        .ep-image-wrapper {
+          position: relative;
+          aspect-ratio: 16 / 9;
+          overflow: hidden;
+          border-radius: 4px;
+          img { width: 100%; height: 100%; object-fit: cover; transition: 0.4s; }
+          .ep-number-badge {
+            position: absolute;
+            top: 10px; left: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 8px;
+            font-size: 0.8rem;
+            border-radius: 2px;
           }
-
-          .ep-overview {
-            margin-top: 12px;
-            font-size: 0.9rem;
-            color: #999;
-            line-height: 1.5;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+          .ep-runtime {
+            position: absolute;
+            top: 10px; right: 10px;
+            background: rgba(0,0,0,0.6);
+            font-size: 0.75rem;
+            padding: 2px 6px;
           }
-
-          &:hover img { transform: scale(1.1); }
+          .ep-title-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 20px 12px 8px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            font-weight: 600;
+            font-size: 0.95rem;
+          }
         }
+        .ep-overview {
+          margin-top: 10px;
+          font-size: 0.85rem;
+          color: #999;
+          line-height: 1.4;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+        &:hover img { transform: scale(1.05); }
       }
     }
   }
 
   .section.cast-section {
-    padding: 2rem 4%;
-
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1.5rem;
-      border-left: 3px solid $netflix-red;
-      padding-left: 12px;
-    }
-
+    padding: 3rem 4%;
     .cast-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      width: 100%;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 20px;
 
       .actor-card {
-        background: transparent;
-        border-radius: 8px;
-        overflow: hidden;
-        transition: all 0.3s $ease-netflix;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         text-align: center;
-
         img {
-          width: 100%;
-          max-width: 120px;
-          aspect-ratio: 1 / 1;
-          object-fit: cover;
+          width: 100px;
+          height: 100px;
           border-radius: 50%;
-          margin-bottom: 8px;
+          object-fit: cover;
+          margin-bottom: 10px;
           border: 2px solid transparent;
-          transition: border-color 0.3s ease;
+          transition: 0.3s;
         }
-
-        .actor-info {
-          padding: 5px;
-          width: 100%;
-
-          .actor-name {
-            font-weight: 600;
-            font-size: 1rem;
-            color: #fff;
-            margin-bottom: 2px;
-            line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-          }
-
-          .character {
-            font-size: 0.90rem;
-            color: #808080;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-          }
-        }
-
-        &:hover {
-          transform: translateY(-5px);
-
-          img {
-            border-color: $netflix-red;
-          }
-
-          .actor-name {
-            color: $netflix-red;
-          }
-        }
+        .actor-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+        .character { font-size: 0.8rem; color: #808080; }
+        &:hover img { border-color: $netflix-red; }
       }
     }
   }
 
   .section.recommendations-section {
-    padding: 4rem 4%;
+    padding: 3rem 4%;
     .movie-row {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
       gap: 15px;
-      overflow: visible;
     }
   }
 }
 
-@media (max-width: 1100px) {
-  .details-page .section.cast-section .cast-grid { grid-template-columns: repeat(3, 1fr); }
+@media (max-width: 1024px) {
+  .details-page .details-hero { height: 60vh; }
 }
 
 @media (max-width: 768px) {
   .details-page {
-    .details-hero { height: 70vh; }
-    .section.cast-section .cast-grid { grid-template-columns: repeat(2, 1fr); }
-    .tv-browser .episodes-grid { grid-template-columns: 1fr; }
+    .details-hero {
+      height: 80vh;
+      align-items: flex-end;
+      background-position: center top;
+
+      .details-overlay {
+        background: linear-gradient(to top, $bg-dark 10%, rgba($bg-dark, 0.5) 50%, transparent 100%);
+        align-items: flex-end;
+        padding-bottom: 3rem;
+      }
+
+      .details-content {
+        max-width: 100%;
+        text-align: center;
+        .details-meta { justify-content: center; }
+        .overview { -webkit-line-clamp: 3; font-size: 1rem; }
+      }
+    }
+
+    .tv-browser {
+      .episodes-grid { grid-template-columns: 1fr; gap: 25px; }
+    }
+
+    .section.cast-section .cast-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
   }
+}
+
+@media (max-width: 480px) {
+  .details-page .details-hero { height: 70vh; }
+  .details-page .section.cast-section .cast-grid { grid-template-columns: repeat(2, 1fr); }
+  .details-page .section.recommendations-section .movie-row { grid-template-columns: repeat(2, 1fr); }
 }

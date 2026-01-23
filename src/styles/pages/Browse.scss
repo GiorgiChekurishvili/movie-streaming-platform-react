@@ -1,60 +1,74 @@
 $netflix-red: #e50914;
 $bg-dark: #141414;
-$text-light: #e5e5e5;
-$transition-speed: 450ms;
-$ease-netflix: cubic-bezier(0.5, 0, 0.1, 1);
-$hover-scale: 1.25;
+$nav-height: 68px;
 
 .browse-container {
-  padding-top: 80px;
-  min-height: 100vh;
+  padding-top: $nav-height;
   background-color: $bg-dark;
-  color: $text-light;
+  min-height: 100vh;
 
   .browse-header {
     padding: 20px 4%;
     position: sticky;
-    top: 0;
+    top: $nav-height;
     z-index: 100;
-    background: linear-gradient(to bottom, rgba($bg-dark, 1) 60%, rgba($bg-dark, 0));
-    backdrop-filter: blur(10px);
+    background: $bg-dark;
 
     h1 {
-      font-size: 2.5rem;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
       margin-bottom: 20px;
-      font-weight: 700;
+      font-weight: 800;
       color: #fff;
     }
 
-    .category-filters {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      max-width: 100%;
+    .filters-wrapper {
+      position: relative;
 
-      &::-webkit-scrollbar { display: none; }
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60px;
+        height: 100%;
+        background: linear-gradient(to right, transparent, $bg-dark);
+        pointer-events: none;
+        z-index: 2;
+      }
 
-      .genre-chip {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: #fff;
-        padding: 8px 20px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        white-space: nowrap;
-        transition: all 0.3s ease;
+      .category-filters {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 10px 0;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
 
-        &:hover {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: rgba(255, 255, 255, 0.5);
-        }
+        scrollbar-width: none;
+        &::-webkit-scrollbar { display: none; }
 
-        &.active {
-          background: #fff;
-          color: $bg-dark;
-          border-color: #fff;
-          font-weight: 700;
+        .genre-chip {
+          flex-shrink: 0;
+          background: rgba(255, 255, 255, 0.1);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: #fff;
+          padding: 8px 22px;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 0.95rem;
+          font-weight: 500;
+          transition: all 0.2s;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.2);
+          }
+
+          &.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+            font-weight: 700;
+          }
         }
       }
     }
@@ -62,36 +76,30 @@ $hover-scale: 1.25;
 
   .movie-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 40px 15px;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 30px 15px;
     padding: 40px 4%;
 
-    overflow: visible;
+    @media (max-width: 1200px) { grid-template-columns: repeat(5, 1fr); }
+    @media (max-width: 992px) { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 768px) { grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 480px) { grid-template-columns: repeat(2, 1fr); gap: 15px 10px; }
   }
 
   .loader {
     text-align: center;
     padding: 40px;
-    font-size: 1.2rem;
     color: $netflix-red;
-    font-weight: 600;
-    letter-spacing: 1px;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-}
-
-@keyframes pulse {
-  0% { opacity: 0.5; }
-  50% { opacity: 1; }
-  100% { opacity: 0.5; }
-}
-
-@media (max-width: 900px) {
-  .browse-container {
-    .browse-header h1 { font-size: 1.8rem; }
-    .movie-grid {
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 30px 10px;
+    &::after {
+      content: '';
+      display: inline-block;
+      width: 25px; height: 25px;
+      border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: $netflix-red;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
     }
   }
 }
+
+@keyframes spin { to { transform: rotate(360deg); } }
